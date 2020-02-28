@@ -11,7 +11,7 @@ class Config:
         self.cfg_vol = cfg_vol
         self.cfg_file = cfg_file
         self._load_config()
-        self._handler = PatternMatchingEventHandler(patterns=["*config.json"])
+        self._handler = PatternMatchingEventHandler(patterns=[f"*{cfg_file}"])
         # I use on_deleted because the last thing that happens when a config is updated is the old one is deleted
         self._handler.on_deleted = self._event_handler
         self._observer = Observer()
