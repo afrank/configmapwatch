@@ -1,0 +1,31 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: afrank-test
+  name: afrank-test
+  namespace: afrank-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: afrank-test
+  template:
+    metadata:
+      annotations:
+        configversion: "1"
+      labels:
+        app: afrank-test
+    spec:
+      containers:
+      - name: afrank-test
+        image: afrank/k8s-config-test:latest
+        imagePullPolicy: Always
+        volumeMounts:
+        - mountPath: /opt/config
+          name: config
+      restartPolicy: Always
+      volumes:
+      - name: config
+        configMap:
+          name: test-config

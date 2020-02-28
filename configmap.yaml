@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: test-config
+  namespace: afrank-dev
+data:
+  config.json: |
+    {"THIS":"is a test","HERE": "is another testXXX","KEY": "here's another key"}
