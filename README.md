@@ -24,3 +24,24 @@ There are two things that control how often new changes show up. The kubelet `sy
 2020-02-27 22:35:16 - Deleted directory: /opt/config/..2020_02_27_22_33_49.110340463
 2020-02-27 22:35:16 - Modified directory: /opt/config
 ```
+
+## Running the Demo
+Start by applying the configmap and deployment manifests
+```
+$ kubectl apply -f configmap.yaml 
+configmap/test-config created
+$ kubectl apply -f deploy.yaml 
+deployment.extensions/afrank-test created
+```
+Now tail your pod logs. You should see the config defined in configmap.yaml
+```
+$ kubectl -nafrank-dev logs -f deployments/afrank-test
+2020-02-28 15:08:56 - {'THIS': 'is a test', 'HERE': 'is another test', 'KEY': "here's another key", 'ANOTHER': 'and yet another key'}
+```
+Now update your configmap either with `kubectl -nafrank-dev edit cm test-config` or edit configmap.yaml and re-apply it. Within a minute or so you should see your change get picked up in the running pod.
+```
+2020-02-28 15:12:46 - {'THIS': 'is a test', 'HERE': 'is another test', 'KEY': "here's another key", 'ANOTHER': 'and yet another key'}
+2020-02-28 15:12:46 - detected a config change; re-reading config.json.
+2020-02-28 15:12:49 - {'THIS': 'is a test', 'HERE': 'is another test', 'KEY': "here's another key", 'ANOTHER': 'and yet another key', 'CHANGE': "here's my new entry"}
+2020-02-28 15:12:52 - {'THIS': 'is a test', 'HERE': 'is another test', 'KEY': "here's another key", 'ANOTHER': 'and yet another key', 'CHANGE': "here's my new entry"}
+```
